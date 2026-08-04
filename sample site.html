@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>○○大学 国際交流・留学案内ポータル</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 全体の基本設定（15pxスケール） */
+        html, body {
+            margin: 0; padding: 0; background-color: #f6f8fa;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8; 
+            color: #24292f;
+            font-size: 15px;
+            scroll-behavior: smooth;
+        }
+
+        /* 🏛 深みのあるプレミアムネイビーヘッダー */
+        .v2-premium-header {
+            position: fixed;
+            top: 0; left: 0; right: 0; z-index: 1000;
+            background: linear-gradient(135deg, #1b2a4a 0%, #111b30 100%);
+            color: #ffffff; 
+            padding: 16px 40px; 
+            box-shadow: 0 4px 25px rgba(17, 27, 48, 0.2);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            transform: translateY(0);
+        }
+
+        /* スクロール時の非表示アニメーション */
+        .v2-premium-header.hide {
+            transform: translateY(-100%);
+            box-shadow: none;
+        }
+
+        /* ヘッダー内部レイアウト */
+        .header-container { 
+            max-width: 1140px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 20px;
+        }
+        
+        .header-left { flex: 1; }
+        .header-left h1 { font-size: 1.35rem; color: #ffffff; margin: 0; font-weight: 700; letter-spacing: 0.03em; }
+        .header-left p { margin: 4px 0 0 0; font-size: 12px; color: #afb8c5; font-weight: 500; }
+        
+        .header-right { display: flex; align-items: center; }
+        .header-btn-grid { display: flex; flex-direction: row; gap: 8px; align-items: center; }
+
+        /* ポータル共通ボタン */
+        .v2-sys-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; font-size: 12px; font-weight: 600;
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff !important; text-decoration: none;
+            border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.15);
+            box-sizing: border-box;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .v2-sys-btn:hover { 
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #3a8fb7;
+            transform: translateY(-1px);
+        }
+
+        /* メール問い合わせ用調整 */
+        .v2-sys-btn.mail-btn { background: rgba(58, 143, 183, 0.2); border-color: rgba(58, 143, 183, 0.4); }
+        .v2-sys-btn.mail-btn:hover { background: rgba(58, 143, 183, 0.35); border-color: #3a8fb7; }
+
+        /* メインコンテンツエリア */
+        .main-wrapper { 
+            max-width: 1140px; 
+            margin: 125px auto 60px auto; 
+            padding: 0 20px; 
+        }
+
+        /* 🔷 重厚感のある大見出し H2 */
+        h2 { 
+            font-size: 1.35rem; color: #1b2a4a; background-color: #edf1f6; padding: 12px 20px; 
+            border-radius: 6px; margin-top: 55px; margin-bottom: 24px; font-weight: 700; 
+            border-left: 6px solid #1b2a4a;
+            scroll-margin-top: 100px;
+        }
+        
+        /* 🔹 シャープな小見出し H3 */
+        h3 { 
+            font-size: 1.12rem; color: #1b2a4a; margin-top: 35px; margin-bottom: 16px; font-weight: 700; 
+            border-left: 4px solid #3a8fb7; padding-left: 10px;
+            border-bottom: 1px solid #d0d7de; padding-bottom: 6px; 
+        }
+        h3 small { font-size: 0.65rem; color: #6e7781; font-weight: 500; letter-spacing: 0.1em; margin-left: 8px; text-transform: uppercase; }
+        
+        /* ✨ 2段組みエリア */
+        .top-info-flex {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+        .info-panel {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+        }
+        .info-panel h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* お知らせリスト全体の箱 */
+        .news-list-container {
+            max-height: 180px;       
+            overflow-y: auto;        
+            padding-right: 8px;      
+        }
+
+        /* お知らせリストの調整 */
+        .news-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .news-list li {
+            border-bottom: 1px dashed #e1e4e8;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .news-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .news-meta {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        
+        .news-date {
+            font-weight: 600;
+            color: #57606a;
+            margin-right: 10px;
+        }
+        
+        /* 🎨 お知らせバッジのデザイン設定 */
+        .news-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+        .news-badge.important {
+            background: #ffebe9;
+            color: #cf222e;
+        }
+        .news-badge.info {
+            background: #ddf4ff;
+            color: #0969da;
+        }
+
+        .news-content {
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        /* 不正防止パネルの特別装飾 */
+        .warning-panel {
+            border-top: 4px solid #8b1e25; 
+            background: #faf8f8;
+        }
+        .warning-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .warning-btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* 📦 上質なカードボックス */
+        .fund-box { 
+            background: #ffffff; border: 1px solid #d0d7de; padding: 32px; margin-bottom: 35px; 
+            border-radius: 8px; box-shadow: 0 3px 12px rgba(0,0,0,0.02); 
+        }
+
+        /* 📑 メインメニューグリッド */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .menu-card {
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 24px;
+            text-decoration: none;
+            color: #24292f;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column; 
+        }
+        .menu-card i {
+            font-size: 24px;         
+            color: #3a8fb7;
+            margin-bottom: 14px;     
+            display: inline-block;
+        }
+        .menu-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 15.5px;
+            color: #1b2a4a;
+            font-weight: 700;
+        }
+        .menu-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #57606a;
+            line-height: 1.6;
+        }
+        .menu-card:hover {
+            border-color: #1b2a4a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(27, 42, 74, 0.08);
+        }
+
+        /* 🔗 リンクボタン */
+        .link-btn { 
+            display: inline-flex; align-items: center; gap: 6px; background: #1b2a4a; 
+            color: #fff !important; text-decoration: none; padding: 9px 18px; border-radius: 6px; 
+            font-size: 13px; font-weight: 600;
+            transition: all 0.2s; 
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        .link-btn:hover { background: #2b3e6b; transform: translateY(-1px); }
+        .link-btn-danger { background: #8b1e25; }
+        .link-btn-danger:hover { background: #6b151a; }
+        .link-btn-muted-outline { background: #ffffff; color: #1b2a4a !important; border: 1px solid #d0d7de; }
+        .link-btn-muted-outline:hover { background: #f6f8fa; border-color: #c0c7ce; transform: translateY(-1px); }
+
+        ul { padding-left: 20px; font-size: 14.5px; color: #24292f; }
+        li { margin-bottom: 8px; }
+
+        /* 🏛 フッター */
+        .contact-footer { 
+            background: #111b30; color: #ffffff; padding: 35px 40px; border-radius: 8px; 
+            margin-top: 60px; 
+        }
+        .footer-table { display: flex; justify-content: space-between; gap: 30px; width: 100%; }
+        .footer-cell { flex: 1; font-size: 14px; line-height: 1.7; }
+        .footer-cell a { color: #3a8fb7; text-decoration: none; font-weight: 600; }
+        .footer-cell a:hover { text-decoration: underline; color: #5cb3dd; }
+
+        /* 📱 レスポンシブ表示対応 */
+        @media screen and (max-width: 1024px) {
+            html, body { font-size: 14.5px; }
+            .v2-premium-header { padding: 16px 20px; position: relative; } 
+            .header-container { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .header-left h1 { font-size: 1.25rem; }
+            .header-left p { font-size: 11px; }
+            .header-right { width: 100%; }
+            .header-btn-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; } 
+            .v2-sys-btn { padding: 10px 12px; font-size: 11px; justify-content: center; text-align: center; white-space: normal; }
+            .v2-sys-btn span { display: inline-block; margin-top: 0; }
+            .v2-sys-btn.mail-btn { grid-column: span 2; } 
+            
+            .main-wrapper { margin-top: 25px; padding: 0 16px; } 
+            .top-info-flex { flex-direction: column; gap: 15px; }
+            .warning-btn-row { flex-direction: column; gap: 10px; } 
+            .menu-grid { grid-template-columns: 1fr; gap: 12px; }
+            .footer-table { flex-direction: column; gap: 20px; }
+            .footer-cell { text-align: left !important; }
+            .news-list li { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .news-meta { margin-right: 0; }
+        }
+
+        /* 🖨 印刷用設定 */
+        @media print {
+            .v2-premium-header {
+                position: relative !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                padding: 0 0 15px 0 !important;
+                border-bottom: 2px solid #1b2a4a !important;
+                transform: none !important;
+            }
+            .header-container { display: block !important; }
+            .header-left p, .header-right { display: none !important; }
+            .header-left h1 { color: #1b2a4a !important; font-size: 1.6rem !important; }
+            .main-wrapper { margin-top: 20px !important; padding: 0 !important; }
+            h2 { background: #f0f0f0 !important; border-left: 6px solid #1b2a4a !important; page-break-after: avoid; }
+            .news-list-container { max-height: 180px !important; overflow: hidden !important; }
+            .top-info-flex { display: block !important; }
+            .info-panel { margin-bottom: 20px !important; page-break-inside: avoid; background: #ffffff !important; box-shadow: none !important; }
+            .menu-grid { display: block !important; }
+            .menu-card { margin-bottom: 15px !important; page-break-inside: avoid; box-shadow: none !important; border: 1px solid #cccccc !important; }
+            .menu-card i { display: none !important; }
+            .fund-box { page-break-inside: avoid; box-shadow: none !important; border: 1px solid #cccccc !important; }
+            .link-btn { display: none !important; }
+            .contact-footer { background: #ffffff !important; color: #000000 !important; border-top: 2px solid #111b30 !important; padding: 20px 0 0 0 !important; }
+            .footer-table { display: block !important; }
+            .footer-cell { margin-bottom: 10px !important; color: #000000 !important; }
+            .footer-cell a { color: #000000 !important; text-decoration: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="v2-premium-header" id="mainHeader">
+        <div class="header-container">
+            <div class="header-left">
+                <div style="font-size: 11px; color: #3a8fb7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px;">○○大学 学術総合研究域</div>
+                <h1>国際連携推進部 教務・留学推進課</h1>
+                <p>事務手続き案内ポータル</p>
+            </div>
+            
+            <div class="header-right">
+                <div class="header-btn-grid">
+                    <a href="#" target="_blank" class="v2-sys-btn">
+                        <i class="fa-solid fa-laptop-code" style="color: #3a8fb7;"></i> <span>Global Gateway (学生用)</span>
+                    </a>
+                    <a href="#" target="_blank" class="v2-sys-btn">
+                        <i class="fa-solid fa-folder-open" style="color: #3a8fb7;"></i> <span>学務事務部 Web</span>
+                    </a>
+                    <a href="#" target="_blank" class="v2-sys-btn">
+                        <i class="fa-solid fa-building-columns" style="color: #3a8fb7;"></i> <span>海外プログラムポータル(教職員用)</span>
+                    </a>
+                    <a href="mailto:sample-contact@example.com" class="v2-sys-btn mail-btn" title="問い合わせ窓口へメール">
+                        <i class="fa-solid fa-envelope" style="color: #3a8fb7;"></i> <span>メール問い合わせ</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-wrapper">
+
+        <div style="margin-bottom: 35px; border-bottom: 1px solid #d0d7de; padding-bottom: 24px;">
+            <h2 style="background: none; border: none; padding: 0; margin: 0 0 10px 0; font-size: 1.6rem; color: #1b2a4a;">教職員・学生向け 事務手続き案内</h2>
+            <p style="margin: 0; font-size: 14.5px; color: #57606a;">各種手続き、申請様式、各種ガイドライン等を掲載しています。各項目を選択して詳細をご確認ください。</p>
+        </div>
+
+        <!-- 2段組みエリア -->
+        <div class="top-info-flex">
+            <!-- お知らせパネル -->
+            <div class="info-panel">
+                <div class="panel-head">
+                    <h3>
+                        <span><i class="fa-solid fa-bullhorn" style="color: #2563eb; margin-right: 8px;"></i>事務局からのお知らせ</span>
+                        <small>News & Updates</small>
+                    </h3>
+                </div>
+                
+                <div class="news-list-container">
+                    <ul class="news-list">
+                         <li>
+                            <div class="news-meta">
+                                <span class="news-date">2026.08.03</span>
+                                <span class="news-badge important">重要</span>
+                            </div>
+                            <span class="news-content">海外渡航時の危機管理講座は
+                            <a href="#" target="_blank">LMSシステム</a> から必ず受講してください。</span>
+                        </li><li>
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.31</span>
+                                <span class="news-badge info">通知</span>
+                            </div>
+                            <span class="news-content">奨学金受給者全員へ手続きに関する案内を送付しました。</span>
+                        </li><li>
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.31</span>
+                                <span class="news-badge info">通知</span>
+                            </div>
+                            <span class="news-content">教務事務Webポータルサイトをリニューアル開設しました。</span>
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 適正執行パネル -->
+            <div class="info-panel warning-panel">
+                <div class="panel-head">
+                    <h3>
+                        <span style="color: #0f172a;"><i class="fa-solid fa-shield-halved" style="color: #e11d48; margin-right: 8px;"></i>適正なプログラム費の運用について</span>
+                        <small style="color: #e11d48;">Compliance</small>
+                    </h3>
+                </div>
+                
+                <div class="warning-body">
+                    <p style="font-size: 13.5px; margin: 0; color: #1e293b; line-height: 1.7;">
+                        <strong>適正な公的資金・研究費執行の徹底</strong>が求められています。ルールの誤認等を防ぐためにも、今一度案内ページをご確認ください。
+                    </p>
+                    
+                    <div class="warning-btn-group">
+                        <a href="#" class="link-btn link-btn-danger" target="_blank">
+                            <i class="fa-solid fa-file-shield"></i> 「研究費等の適正な管理について」経理課より
+                        </a>
+                        
+                        <div class="warning-btn-row">
+                            <a href="#" class="link-btn link-btn-muted-outline" target="_blank" style="flex: 1;">
+                                <i class="fa-solid fa-book"></i> ルールハンドブック (日本語)
+                            </a>
+                            <a href="#" class="link-btn link-btn-muted-outline" target="_blank" style="flex: 1;">
+                                <i class="fa-solid fa-globe"></i> Rule Handbook (English)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>各種手続きメニュー</h2>
+        <div class="menu-grid">
+            <a href="#" target="_blank" class="menu-card">
+                <i class="fa-solid fa-plane-departure"></i>
+                <h4>本学 → 海外へ</h4>
+                <p>海外派遣プログラムの募集、渡航、帰国、単位認定手続きまで</p>
+            </a>
+            
+            <a href="#" target="_blank" class="menu-card">
+                <i class="fa-solid fa-plane-arrival"></i>
+                <h4>海外 → 本学へ</h4>
+                <p>国内受入プログラムの募集、学生受入、プログラム実施、帰国まで</p>
+            </a>
+            
+            <a href="#" target="_blank" class="menu-card">
+                <i class="fa-solid fa-globe"></i>
+                <h4>長期派遣留学</h4>
+                <p>交換留学・長期間派遣プログラムのご案内です。</p>
+            </a>
+            
+            <a href="#" target="_blank" class="menu-card">
+                <i class="fa-solid fa-file-pdf" style="color: #3a8fb7;"></i>
+                <h4>各種手続き様式一覧 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75em; color: #57606a;"></i></h4>
+                <p>各種申請書類・提出物チェックシートの一覧です（PDF）</p>
+            </a>
+        </div>
+
+        <h2>共通事項・ガイドライン</h2>
+        <div class="fund-box">
+            <p style="margin-bottom: 16px; font-size: 14.5px;">
+                海外派遣、国内受入れ、長期派遣留学に共通する申請手続き、必要書類、渡航準備、安全管理、滞在中の遵守事項などをまとめています。各プログラムを円滑に進めるため、事前に内容をご確認のうえ計画的な準備をお願いいたします。
+            </p>
+
+            <!-- 1. 長期派遣 -->
+            <a href="#" target="_blank" style="text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-radius: 8px; border: 1px solid #e0e0e0; background-color: #ffffff; margin-bottom: 12px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f5f9fc';" onmouseout="this.style.backgroundColor='#ffffff';">
+                <div style="display: flex; align-items: flex-start;">
+                    <i class="fa-solid fa-calendar-check" style="color: #1b2a4a; margin-right: 10px; margin-top: 3px; font-size: 1.1rem;"></i>
+                    <div>
+                        <div style="font-weight: bold; font-size: 1.1rem; color: #1b2a4a; line-height: 1.4;">長期派遣_基本手続きのご案内</div>
+                        <div style="font-size: 0.85rem; color: #666666; margin-top: 4px;">Long-Term Study Abroad Guidelines</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-earth-americas" style="font-size: 2rem; color: #1b2a4a; margin-left: 20px; flex-shrink: 0;"></i>
+            </a>
+
+            <!-- 2. 短期派遣 -->
+            <a href="#" target="_blank" style="text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-radius: 8px; border: 1px solid #e0e0e0; background-color: #ffffff; margin-bottom: 12px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f5f9fc';" onmouseout="this.style.backgroundColor='#ffffff';">
+                <div style="display: flex; align-items: flex-start;">
+                    <i class="fa-solid fa-calendar-check" style="color: #1b2a4a; margin-right: 10px; margin-top: 3px; font-size: 1.1rem;"></i>
+                    <div>
+                        <div style="font-weight: bold; font-size: 1.1rem; color: #1b2a4a; line-height: 1.4;">短期派遣_基本手続きのご案内</div>
+                        <div style="font-size: 0.85rem; color: #666666; margin-top: 4px;">Short-Term Study Abroad Guidelines</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-plane-departure" style="font-size: 2rem; color: #1b2a4a; margin-left: 20px; flex-shrink: 0;"></i>
+            </a>
+
+            <!-- 3. 危機管理 -->
+            <a href="#" target="_blank" style="text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-radius: 8px; border: 1px solid #e0e0e0; background-color: #ffffff; margin-bottom: 12px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f5f9fc';" onmouseout="this.style.backgroundColor='#ffffff';">
+                <div style="display: flex; align-items: flex-start;">
+                    <i class="fa-solid fa-calendar-check" style="color: #1b2a4a; margin-right: 10px; margin-top: 3px; font-size: 1.1rem;"></i>
+                    <div>
+                        <div style="font-weight: bold; font-size: 1.1rem; color: #1b2a4a; line-height: 1.4;">危機管理・安全対策ご案内</div>
+                        <div style="font-size: 0.85rem; color: #666666; margin-top: 4px;">Risk Management & Safety</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-shield-halved" style="font-size: 2rem; color: #1b2a4a; margin-left: 20px; flex-shrink: 0;"></i>
+            </a>
+        </div>
+
+        <p style="text-align: right;"><a href="#mainHeader">▲ページ上部へ戻る</a></p>
+
+        <!-- === 1. 関連リンク（中央揃え） === -->
+        <h3 style="margin-top: 35px; color: #1b2a4a; font-size: 1.25rem; text-align: center;">
+            <i class="fa-solid fa-circle-info" style="color: #1b2a4a; margin-right: 6px;"></i>
+            関連リンク <small style="color: #666666; font-size: 0.85rem; margin-left: 8px; font-weight: normal;">INQUIRIES & LINKS</small>
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; margin: 16px auto 0; max-width: 680px;">
+            <a href="#" target="_blank" style="text-decoration: none; color: #1b2a4a; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-radius: 8px; background-color: #ffffff; border: 1px solid #eef2f5; border-left: 4px solid #0d6efd; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.25s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-graduation-cap" style="color: #0d6efd; font-size: 1.4rem;"></i>
+                    <span style="font-size: 0.95rem; font-weight: 600; line-height: 1.4;">【学生公開用】年度別 海外派遣プログラム一覧（LMS）</span>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem; color: #aaaaaa; margin-left: 12px; flex-shrink: 0;"></i>
+            </a>
+
+            <a href="#" target="_blank" style="text-decoration: none; color: #1b2a4a; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-radius: 8px; background-color: #ffffff; border: 1px solid #eef2f5; border-left: 4px solid #0d6efd; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.25s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-file-video" style="color: #0d6efd; font-size: 1.4rem;"></i>
+                    <span style="font-size: 0.95rem; font-weight: 600; line-height: 1.4;">大学公式 留学紹介動画</span>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem; color: #aaaaaa; margin-left: 12px; flex-shrink: 0;"></i>
+            </a>
+
+            <a href="#" target="_blank" style="text-decoration: none; color: #1b2a4a; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-radius: 8px; background-color: #ffffff; border: 1px solid #eef2f5; border-left: 4px solid #0d6efd; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.25s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)';">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-file-video" style="color: #0d6efd; font-size: 1.4rem;"></i>
+                    <span style="font-size: 0.95rem; font-weight: 600; line-height: 1.4;">申請手続きに関する補足ガイダンス動画</span>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85rem; color: #aaaaaa; margin-left: 12px; flex-shrink: 0;"></i>
+            </a>
+        </div>
+
+        <!-- === 2. 世界時間（中央揃え） === -->
+        <h3 style="margin-top: 45px; color: #1b2a4a; font-size: 1.25rem; text-align: center;">
+            <i class="fa-solid fa-clock" style="color: #1b2a4a; margin-right: 6px;"></i>
+            主要都市の現在時刻
+            <small style="color: #666666; font-size: 0.85rem; margin-left: 8px; font-weight: normal;">World Clock</small>
+        </h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px auto 0; max-width: 900px;">
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #1b2a4a; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-location-dot" style="color: #dc3545; margin-right: 4px;"></i>日本 (JST)
+                </div>
+                <div id="clock-jst" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #de2910; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-city" style="color: #de2910; margin-right: 4px;"></i>深セン (CST)
+                </div>
+                <div id="clock-shenzhen" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #2d2a4a; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-place-of-worship" style="color: #2d2a4a; margin-right: 4px;"></i>タイ (ICT)
+                </div>
+                <div id="clock-thailand" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #da251d; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-star" style="color: #da251d; margin-right: 4px;"></i>ベトナム (ICT)
+                </div>
+                <div id="clock-vietnam" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #ff9933; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-om" style="color: #ff9933; margin-right: 4px;"></i>インド (IST)
+                </div>
+                <div id="clock-india" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #0d6efd; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-building-columns" style="color: #0d6efd; margin-right: 4px;"></i>ロンドン (GMT)
+                </div>
+                <div id="clock-london" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #198754; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-statue-of-liberty" style="color: #198754; margin-right: 4px;"></i>NY (EST)
+                </div>
+                <div id="clock-ny" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #002d62; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-water" style="color: #002d62; margin-right: 4px;"></i>バッファロー (EST)
+                </div>
+                <div id="clock-buffalo" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #ff0000; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-leaf" style="color: #ff0000; margin-right: 4px;"></i>カナダ東部 (EST)
+                </div>
+                <div id="clock-canada" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #ffc107; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
+                    <i class="fa-solid fa-sun" style="color: #ffc107; margin-right: 4px;"></i>シドニー (AEST)
+                </div>
+                <div id="clock-sydney" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 時刻更新スクリプト -->
+    <script>
+        function updateWorldClocks() {
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            document.getElementById('clock-jst').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Tokyo' });
+            document.getElementById('clock-shenzhen').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Shanghai' });
+            document.getElementById('clock-thailand').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Bangkok' });
+            document.getElementById('clock-vietnam').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Ho_Chi_Minh' });
+            document.getElementById('clock-india').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Kolkata' });
+            document.getElementById('clock-london').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Europe/London' });
+            document.getElementById('clock-ny').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'America/New_York' });
+            document.getElementById('clock-buffalo').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'America/New_York' });
+            document.getElementById('clock-canada').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'America/Toronto' });
+            document.getElementById('clock-sydney').textContent = new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Australia/Sydney' });
+        }
+
+        setInterval(updateWorldClocks, 1000);
+        updateWorldClocks();
+    </script>
+</body>
+</html>
