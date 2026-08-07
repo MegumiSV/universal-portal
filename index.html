@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:title" content="Global Mobility & Study Abroad Portal" />
-<meta property="og:description" content="Official Institutional Information & Administrative Resources Portal for International Programs, Exchange Students, and Global Academic Partnerships." />
-<meta property="og:url" content="https://megumisv.github.io/universal-portal/" />
-<meta property="og:image" content="https://raw.githubusercontent.com/MegumiSV/universal-portal/main/ogp.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+    <meta property="og:title" content="Global Mobility & Study Abroad Portal" />
+    <meta property="og:description" content="Official Institutional Information & Administrative Resources Portal for International Programs, Exchange Students, and Global Academic Partnerships." />
+    <meta property="og:url" content="https://megumisv.github.io/universal-portal/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/MegumiSV/universal-portal/main/ogp.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Base Styles (15px scale) */
@@ -260,6 +260,133 @@
         ul { padding-left: 20px; font-size: 14.5px; color: #24292f; }
         li { margin-bottom: 8px; }
 
+        /* --- New Components: Filter & FAQ --- */
+        
+        /* Filter Controls */
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1b2a4a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .filter-select {
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            font-size: 13.5px;
+            color: #334155;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-select:focus {
+            border-color: #3a8fb7;
+        }
+
+        /* Program List Items */
+        .program-card {
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        .program-card:hover {
+            border-color: #3a8fb7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .program-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .program-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #1b2a4a;
+        }
+        .program-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .program-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #edf1f6;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* Interactive FAQ Accordion */
+        .faq-item {
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .faq-question {
+            padding: 16px 20px;
+            font-weight: 700;
+            color: #1b2a4a;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            background-color: #ffffff;
+            transition: background-color 0.2s;
+        }
+        .faq-question:hover {
+            background-color: #f8fafc;
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #475569;
+            font-size: 14px;
+            border-top: 1px solid transparent;
+        }
+        .faq-item.active .faq-answer {
+            padding: 16px 20px;
+            max-height: 200px;
+            border-top-color: #e2e8f0;
+            background-color: #fafafa;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+            color: #3a8fb7;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
         /* Responsive Design */
         @media screen and (max-width: 1024px) {
             html, body { font-size: 14.5px; }
@@ -279,6 +406,7 @@
             .menu-grid { grid-template-columns: 1fr; gap: 12px; }
             .news-list li { flex-direction: column; align-items: flex-start; gap: 4px; }
             .news-meta { margin-right: 0; }
+            .program-card { flex-direction: column; align-items: flex-start; gap: 12px; }
         }
 
         /* Print Styles */
@@ -305,6 +433,8 @@
             .menu-card i { display: none !important; }
             .fund-box { page-break-inside: avoid; box-shadow: none !important; border: 1px solid #cccccc !important; }
             .link-btn { display: none !important; }
+            .filter-controls { display: none !important; }
+            .faq-answer { max-height: none !important; padding: 10px 20px !important; }
         }
     </style>
 </head>
@@ -414,6 +544,76 @@
             </div>
         </div>
 
+        <!-- NEW: Program Search Filter Section -->
+        <h2>Study Abroad Program Finder</h2>
+        <div class="fund-box">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="filter-region"><i class="fa-solid fa-earth-americas"></i> Region</label>
+                    <select id="filter-region" class="filter-select">
+                        <option value="all">All Regions</option>
+                        <option value="north-america">North America</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-type"><i class="fa-solid fa-clock"></i> Duration</label>
+                    <select id="filter-type" class="filter-select">
+                        <option value="all">All Durations</option>
+                        <option value="long-term">Long-Term (Semester/Year)</option>
+                        <option value="short-term">Short-Term (Summer/Spring)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-lang"><i class="fa-solid fa-language"></i> Language</label>
+                    <select id="filter-lang" class="filter-select">
+                        <option value="all">All Languages</option>
+                        <option value="english">English</option>
+                        <option value="chinese">Chinese</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="program-list">
+                <div class="program-card" data-region="north-america" data-type="long-term" data-lang="english">
+                    <div class="program-info">
+                        <span class="program-title">University of California Exchange Program</span>
+                        <div class="program-tags">
+                            <span class="program-tag">North America</span>
+                            <span class="program-tag">Long-Term</span>
+                            <span class="program-tag">English</span>
+                        </div>
+                    </div>
+                    <a href="#" class="link-btn" style="padding: 6px 14px; font-size: 12px;">Details <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+
+                <div class="program-card" data-region="europe" data-type="long-term" data-lang="english">
+                    <div class="program-info">
+                        <span class="program-title">University of London Academic Exchange</span>
+                        <div class="program-tags">
+                            <span class="program-tag">Europe</span>
+                            <span class="program-tag">Long-Term</span>
+                            <span class="program-tag">English</span>
+                        </div>
+                    </div>
+                    <a href="#" class="link-btn" style="padding: 6px 14px; font-size: 12px;">Details <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+
+                <div class="program-card" data-region="asia" data-type="short-term" data-lang="chinese">
+                    <div class="program-info">
+                        <span class="program-title">Shenzhen Summer Language & Tech Seminar</span>
+                        <div class="program-tags">
+                            <span class="program-tag">Asia</span>
+                            <span class="program-tag">Short-Term</span>
+                            <span class="program-tag">Chinese</span>
+                        </div>
+                    </div>
+                    <a href="#" class="link-btn" style="padding: 6px 14px; font-size: 12px;">Details <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+
         <h2>Programs & Application Portals</h2>
         <div class="menu-grid">
             <a href="#" target="_blank" class="menu-card">
@@ -484,6 +684,40 @@
             </a>
         </div>
 
+        <!-- NEW: Interactive FAQ Section -->
+        <h2>Frequently Asked Questions</h2>
+        <div style="margin-bottom: 35px;">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span><i class="fa-regular fa-circle-question" style="color: #3a8fb7; margin-right: 8px;"></i> How do I transfer credits earned abroad?</span>
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Credit transfer evaluations must be submitted prior to departure through the Academic Affairs Portal. Please consult with your department advisor to verify course equivalencies.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span><i class="fa-regular fa-circle-question" style="color: #3a8fb7; margin-right: 8px;"></i> Is overseas health insurance mandatory?</span>
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, all participating students must enroll in the university's designated overseas travel and health insurance policy for the entire duration of the program.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span><i class="fa-regular fa-circle-question" style="color: #3a8fb7; margin-right: 8px;"></i> When is the application deadline for exchange programs?</span>
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Application deadlines vary by partner institution. Generally, Spring semester applications close in October, and Fall semester applications close in April.
+                </div>
+            </div>
+        </div>
+
         <p style="text-align: right;"><a href="#mainHeader" style="color: #1b2a4a; font-weight: 600; text-decoration: none;">▲ Back to Top</a></p>
 
         <!-- === Related Links === -->
@@ -529,65 +763,51 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px auto 0; max-width: 900px;">
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #1b2a4a; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-location-dot" style="color: #dc3545; margin-right: 4px;"></i>Tokyo / JST (UTC+9)
+                    <i class="fa-solid fa-location-dot" style="color: #dc3545; margin-right: 4px;"></i>Tokyo / JST
                 </div>
                 <div id="clock-jst" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
 
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #de2910; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-city" style="color: #de2910; margin-right: 4px;"></i>Shenzhen / CST (UTC+8)
+                    <i class="fa-solid fa-city" style="color: #de2910; margin-right: 4px;"></i>Shenzhen / CST
                 </div>
                 <div id="clock-shenzhen" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
 
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #2d2a4a; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-place-of-worship" style="color: #2d2a4a; margin-right: 4px;"></i>Bangkok / ICT (UTC+7)
+                    <i class="fa-solid fa-place-of-worship" style="color: #2d2a4a; margin-right: 4px;"></i>Bangkok / ICT
                 </div>
                 <div id="clock-thailand" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
 
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #da251d; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-star" style="color: #da251d; margin-right: 4px;"></i>Hanoi / ICT (UTC+7)
+                    <i class="fa-solid fa-star" style="color: #da251d; margin-right: 4px;"></i>Hanoi / ICT
                 </div>
                 <div id="clock-vietnam" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
 
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #ff9933; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-om" style="color: #ff9933; margin-right: 4px;"></i>New Delhi / IST (UTC+5:30)
+                    <i class="fa-solid fa-om" style="color: #ff9933; margin-right: 4px;"></i>New Delhi / IST
                 </div>
                 <div id="clock-india" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
 
             <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #0d6efd; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
                 <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-building-columns" style="color: #0d6efd; margin-right: 4px;"></i>London / GMT/BST
+                    <i class="fa-solid fa-building-columns" style="color: #0d6efd; margin-right: 4px;"></i>London / GMT
                 </div>
                 <div id="clock-london" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
             </div>
-
-            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #198754; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
-                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-statue-of-liberty" style="color: #198754; margin-right: 4px;"></i>New York / EST/EDT
-                </div>
-                <div id="clock-ny" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
-            </div>
-
-            <div style="background-color: #ffffff; padding: 14px 16px; border-radius: 8px; border: 1px solid #eef2f5; border-left: 4px solid #002d62; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
-                <div style="font-size: 0.85rem; font-weight: 600; color: #666666; margin-bottom: 4px;">
-                    <i class="fa-solid fa-water" style="color: #002d62; margin-right: 4px;"></i>Buffalo / EST/EDT
-                </div>
-                <div id="clock-buffalo" style="font-size: 1.25rem; font-weight: bold; color: #1b2a4a; font-family: monospace;">--:--:--</div>
-            </div>
         </div>
-
     </div>
 
-    <!-- Script to handle Live Clocks -->
+    <!-- JavaScript logic -->
     <script>
+        // 1. World Clock Script
         function updateClocks() {
             const timezones = {
                 'clock-jst': 'Asia/Tokyo',
@@ -595,34 +815,62 @@
                 'clock-thailand': 'Asia/Bangkok',
                 'clock-vietnam': 'Asia/Ho_Chi_Minh',
                 'clock-india': 'Asia/Kolkata',
-                'clock-london': 'Europe/London',
-                'clock-ny': 'America/New_York',
-                'clock-buffalo': 'America/New_York'
-            };
-
-            const options = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
+                'clock-london': 'Europe/London'
             };
 
             for (const [id, timeZone] of Object.entries(timezones)) {
                 const el = document.getElementById(id);
                 if (el) {
-                    try {
-                        options.timeZone = timeZone;
-                        const formatter = new Intl.DateTimeFormat([], options);
-                        el.textContent = formatter.format(new Date());
-                    } catch (e) {
-                        el.textContent = 'N/A';
-                    }
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        timeZone: timeZone,
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    el.textContent = timeString;
                 }
             }
         }
-
         setInterval(updateClocks, 1000);
         updateClocks();
+
+        // 2. Program Filter Script
+        const regionSelect = document.getElementById('filter-region');
+        const typeSelect = document.getElementById('filter-type');
+        const langSelect = document.getElementById('filter-lang');
+        const programCards = document.querySelectorAll('.program-card');
+
+        function filterPrograms() {
+            const regionVal = regionSelect.value;
+            const typeVal = typeSelect.value;
+            const langVal = langSelect.value;
+
+            programCards.forEach(card => {
+                const matchRegion = (regionVal === 'all' || card.dataset.region === regionVal);
+                const matchType = (typeVal === 'all' || card.dataset.type === typeVal);
+                const matchLang = (langVal === 'all' || card.dataset.lang === langVal);
+
+                if (matchRegion && matchType && matchLang) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        regionSelect.addEventListener('change', filterPrograms);
+        typeSelect.addEventListener('change', filterPrograms);
+        langSelect.addEventListener('change', filterPrograms);
+
+        // 3. FAQ Accordion Script
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const faqItem = item.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
     </script>
 </body>
 </html>
